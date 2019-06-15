@@ -11,6 +11,8 @@ class User(AbstractUser):
     is_agrovet = models.BooleanField(default=False)
     is_vet = models.BooleanField(default=False)
 
+# class 
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(request, instance=None, created=False, **kwargs):
     if created:
