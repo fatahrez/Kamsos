@@ -11,7 +11,14 @@ class User(AbstractUser):
     is_agrovet = models.BooleanField(default=False)
     is_vet = models.BooleanField(default=False)
 
-# class 
+class Pastoralist(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+class Agrovet(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+class Vet(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(request, instance=None, created=False, **kwargs):
