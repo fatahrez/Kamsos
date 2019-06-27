@@ -2,10 +2,13 @@ import jwt
 import datetime
 
 from django.db import models
-from django.contrib.auth.models import (
-    AbstractBaseUser, BaseUserManager, PermissionsMixin
-    )
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
+from .managers import (
+    UserManager, PastoralistManager, AgrovetManager, VetManager
+)
+
+
 
 
 # Create your models here.
@@ -13,6 +16,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    username = models.CharField(db_index=True, max_length=254, unique=True)
     email = models.EmailField(db_index=True, unique=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -45,10 +49,35 @@ class User(AbstractBaseUser):
         return self.email
 
 class Pastoralist(models.Model):
+    username = models.CharField(db_index=True, max_length=254, unique=True)
     animal = models.CharField(max_length=50)
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELD = ['first_name', 'middle_name','last_name']
+
+    objects = PastoralistManager()
+
+    def __str__(self):
+        return self.username
+
 class Agrovet(models.Model):
-    agrovet_chemist_name = models.CharField(max_length=50)
+    agrovet_chemist_name = models.CharField(db_index=True, max_length=50, unique=True)
+
+    USERNAME_FIELD='email'
+    REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']
+
+    objects=AgrovetManager()
+
+    def __str__(self):
+        self.username
 
 class Vet(models.Model):
-    vet_hospital_name = models.CharField(max_length=50)
+    vet_hospital_name = models.CharField(db_index=True, max_length=50, unique=True)
+
+    USERNAME_FIELD='email'
+    REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']
+
+    objects = VetManager()
+
+    def __str__(self):
+        self.username
