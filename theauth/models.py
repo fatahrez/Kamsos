@@ -49,8 +49,6 @@ class User(AbstractBaseUser):
         return self.email
 
 class Pastoralist(models.Model):
-    username = models.CharField(db_index=True, max_length=254, unique=True)
-    animal = models.CharField(max_length=50)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELD = ['first_name', 'middle_name','last_name']
@@ -61,7 +59,6 @@ class Pastoralist(models.Model):
         return self.username
 
 class Agrovet(models.Model):
-    agrovet_chemist_name = models.CharField(db_index=True, max_length=50, unique=True)
 
     USERNAME_FIELD='email'
     REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']
@@ -69,10 +66,9 @@ class Agrovet(models.Model):
     objects=AgrovetManager()
 
     def __str__(self):
-        self.username
+        return self.username
 
 class Vet(models.Model):
-    vet_hospital_name = models.CharField(db_index=True, max_length=50, unique=True)
 
     USERNAME_FIELD='email'
     REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']
@@ -80,4 +76,4 @@ class Vet(models.Model):
     objects = VetManager()
 
     def __str__(self):
-        self.username
+        return self.username

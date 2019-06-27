@@ -15,12 +15,11 @@ class PastoralistManager(BaseUserManager):
         return pastoralist
 
 class AgrovetManager(BaseUserManager):
-    def create_agrovet(self, username, first_name, middle_name, last_name, email, agrovet_chemist_name, password=None):
+    def create_agrovet(self, username, first_name, middle_name, last_name, email, password=None):
         if email is None:
             raise TypeError('Users must have an email address.')
         agrovet = Agrovet(username = username, first_name=first_name, middle_name=middle_name, last_name=last_name,
-                    email=self.normalize_email(email),
-                    agrovet_chemist_name=agrovet_chemist_name)
+                    email=self.normalize_email(email))
         agrovet.set_password(password)
         agrovet.save()
         return agrovet
