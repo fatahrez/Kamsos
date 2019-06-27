@@ -2,7 +2,9 @@ import jwt
 import datetime
 
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import (
+    AbstractBaseUser, BaseUserManager, PermissionsMixin
+    )
 from django.conf import settings
 
 
@@ -43,18 +45,10 @@ class User(AbstractBaseUser):
         return self.email
 
 class Pastoralist(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    last_name = models.CharField(max_length=30)
+    animal = models.CharField(max_length=50)
 
 class Agrovet(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    last_name = models.CharField(max_length=30)
+    agrovet_chemist_name = models.CharField(max_length=50)
 
 class Vet(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    last_name = models.CharField(max_length=30)
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(request, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
+    vet_hospital_name = models.CharField(max_length=50)
