@@ -14,7 +14,7 @@ class PastoralistRegistrationSerializer(serializers.ModelSerializer):
     token = serializers.CharField(max_length=255, read_only=True)
 
     class Meta:
-        model = Student
+        model = Pastoralist
         fields = '__all__'
 
     def create(self, validated_data):
