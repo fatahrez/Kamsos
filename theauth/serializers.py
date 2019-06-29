@@ -6,7 +6,6 @@ from .models import (
     Pastoralist, Agrovet, Vet
 )
 
-
 class PastoralistRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         max_length=128,

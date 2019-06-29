@@ -39,6 +39,8 @@ class VetRegistration(APIView):
     serializer_class = VetRegistrationSerializer
 
     def post(self, request):
+        # user = request.data.get('user', {})
+
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -52,4 +54,4 @@ class UserLogin(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_O)

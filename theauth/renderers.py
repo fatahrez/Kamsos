@@ -20,7 +20,7 @@ class ApiJSONRenderer(JSONRenderer):
             return super(ApiJSONRenderer, self).render(data)
 
         else:
-            return json.dump({
+            return json.dumps({
                 self.object_label: data
             })
 

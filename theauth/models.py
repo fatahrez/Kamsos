@@ -1,5 +1,5 @@
 import jwt
-import datetime
+from datetime import datetime, timedelta
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -7,9 +7,6 @@ from django.conf import settings
 from .managers import (
     UserManager, PastoralistManager, AgrovetManager, VetManager
 )
-
-
-
 
 # Create your models here.
 class User(AbstractBaseUser):
@@ -29,10 +26,10 @@ class User(AbstractBaseUser):
 
     @property
     def token(self):
-        dt = datetime.now() + timedelta(days=days)
+        dt = datetime.now() + timedelta(days=60)
         token = jwt.encode({
-            'id': user_id,
-            'exp': int(time.mktime(dt.timetuple()))
+            'id': self.pk,
+            'exp': int(dt.strftime('%s'))
         }, settings.SECRET_KEY, algorithm='HS256')
         return token.decode('utf-8')
 
@@ -48,7 +45,8 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-class Pastoralist(models.Model):
+class Pastoralist(User):
+    animal_owned = models.CharField(db_index=True, max_length=255)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELD = ['first_name', 'middle_name','last_name']
@@ -56,9 +54,10 @@ class Pastoralist(models.Model):
     objects = PastoralistManager()
 
     def __str__(self):
-        return self.username
+        return self.email
 
-class Agrovet(models.Model):
+class Agrovet(User):
+    agrovet_chemist = models.CharField(db_index=True, max_length=255)
 
     USERNAME_FIELD='email'
     REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']
@@ -68,7 +67,8 @@ class Agrovet(models.Model):
     def __str__(self):
         return self.username
 
-class Vet(models.Model):
+class Vet(User):
+    vet_qualification = models.CharField(db_index=True, max_length=255)
 
     USERNAME_FIELD='email'
     REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']

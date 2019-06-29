@@ -1,16 +1,20 @@
 from django.contrib.auth.models import BaseUserManager
 
+from django.db import models
+# from .models import (
+#     User, Pastoralist, Agrovet, Vet
+# )
+
 class UserManager(BaseUserManager):
     def get_by_natural_key(self, email):
         return self.get(email=email)
 
 class PastoralistManager(BaseUserManager):
-    def create_pastoralist(self, username, first_name, middle_name, last_name, email, password=None):
+    def create_pastoralist(self, username, first_name, middle_name, last_name, email,animal_owned, password=None):
         if email is None:
             raise TypeError('Users must have an email address')
-        pastoralist = Pastoralist(username = username, first_name=first_name, last_name=last_name,
-                        email=self.normalize_email(email),
-                        animal=animal)
+        pastoralist = self.model(username = username, first_name=first_name,middle_name=middle_name, last_name=last_name,
+                        email=self.normalize_email(email), animal_owned=animal_owned)
         pastoralist.set_password(password)
         return pastoralist
 
@@ -25,12 +29,11 @@ class AgrovetManager(BaseUserManager):
         return agrovet
 
 class VetManager(BaseUserManager):
-    def create_vet(self, username, first_name, middle_name, last_name, email, vet_hospital_name, password=None):
+    def create_vet(self, username, first_name, middle_name, last_name, email, password=None):
         if email is None:
             raise TypeError('Users must have an email address')
         vet = Vet(username=username, first_name=first_name, middle_name=middle_name, last_name=last_name,
-            email=self.normalize_email(email),
-            vet_hospital_name=vet_hospital_name)
+            email=self.normalize_email(email))
         vet.set_password(password)
         vet.save()
         return vet
