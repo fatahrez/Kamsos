@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from .models import (
-    Pastoralist, Agrovet, Vet
+    User, Pastoralist, Agrovet, Vet
 )
 
 class PastoralistRegistrationSerializer(serializers.ModelSerializer):
@@ -60,6 +60,16 @@ class UserLoginSearilizer(serializers.Serializer):
         email = data.get('email', None)
         password = data.get('password', None)
 
+        if email is None:
+            raise serializers.ValidationError(
+                'An email address is required to log in.'
+            )
+
+        if password is None:
+            raise serializers.ValidationError(
+                'password is required to login'
+            )
+
         user = authenticate(username=email, password=password)
 
         if user is None:
@@ -68,24 +78,11 @@ class UserLoginSearilizer(serializers.Serializer):
             )
 
         try:
-            user_obj = Pastoralist.objects.get(email=user.email)
+            if userObj is None:
+                userObj = Pastoralist.objects.get(email=user.email)
         except Pastoralist.DoesNotExist:
-            user_obj = None
-
-        try:
-            if user_obj is None:
-                user_obj = Agrovet.objects.get(email=user.email)
-        except Agrovet.DoesNotExist:
             raise serializers.ValidationError(
-                'User with this email and password does not exist'
-            )
-
-        try:
-            if user_obj is None:
-                user_obj = Vet.objects.get(email=user.email)
-        except Vet.DoesNotExist:
-            raise serializers.ValidationError(
-                'User with this email and password does not exist'
+                'User with given email and password does not exists'
             )
 
         if not user.is_active:
