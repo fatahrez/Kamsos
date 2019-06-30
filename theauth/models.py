@@ -22,6 +22,7 @@ class PastoralistManager(BaseUserManager):
         pastoralist = Pastoralist(username = username, first_name=first_name,middle_name=middle_name, last_name=last_name,
                         email=self.normalize_email(email))
         pastoralist.set_password(password)
+        pastoralist.save()
         return pastoralist
 
 class AgrovetManager(BaseUserManager):
