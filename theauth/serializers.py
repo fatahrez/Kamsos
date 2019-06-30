@@ -85,18 +85,26 @@ class UserLoginSearilizer(serializers.Serializer):
             )
 
         try:
-            userObj = Agrovet.objects.get(email=user.email)
+            if userObj is None:
+                userObj = Agrovet.objects.get(email=user.email)
         except Agrovet.DoesNotExist:
             raise serializers.ValidationError(
                 'User with given email and password does not exists'
             )
 
         try:
-            userObj = Vet.objects.get(email=user.email)
+            if userObj is None:
+                userObj = Vet.objects.get(email=user.email)
         except Vet.DoesNotExist:
             raise serializers.ValidationError(
                 'User with given email and password does not exists'
             )
+        # try:
+        #     userObj = Vet.objects.get(email=user.email)
+        # except Vet.DoesNotExist:
+        #     raise serializers.ValidationError(
+        #         'User with given email and password does not exists'
+        #     )
 
         if not user.is_active:
             raise serializers.ValidationError(
