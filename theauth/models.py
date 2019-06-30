@@ -94,7 +94,6 @@ class Pastoralist(User, PermissionsMixin):
         return self.email
 
 class Agrovet(User, PermissionsMixin):
-    # agrovet_chemist = models.CharField(db_index=True, max_length=255)python manage.py migrate --fake
 
     USERNAME_FIELD='email'
     REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']
@@ -105,7 +104,6 @@ class Agrovet(User, PermissionsMixin):
         return self.username
 
 class Vet(User, PermissionsMixin):
-    # vet_qualification = models.CharField(db_index=True, max_length=255)
 
     USERNAME_FIELD='email'
     REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']
