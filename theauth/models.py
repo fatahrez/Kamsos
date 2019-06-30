@@ -81,7 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return (self.first_name, self.last_name)
 
     def __str__(self):
-        return self.email
+        return self.username
 
 class Pastoralist(User, PermissionsMixin):
 
@@ -91,7 +91,7 @@ class Pastoralist(User, PermissionsMixin):
     objects = PastoralistManager()
 
     def __str__(self):
-        return self.email
+        return self.username
 
 class Agrovet(User, PermissionsMixin):
 
