@@ -16,7 +16,7 @@ class PastoralistRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pastoralist
-        fields = '__all__'
+        fields = ["email", "username", "token", "password"]
 
     def create(self, validated_data):
         return Pastoralist.objects.create_pastoralist(**validated_data)
@@ -31,7 +31,7 @@ class AgrovetRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Agrovet
-        fields = '__all__'
+        fields = ["email", "username", "token", "password"]
 
     def create(self, validated_data):
         return Agrovet.objects.create_agrovet(**validated_data)
@@ -46,7 +46,7 @@ class VetRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vet
-        fields = '__all__'
+        fields = ["email", "username", "token", "password"]
 
     def create(self, validated_data):
         return Vet.objects.create_vet(**validated_data)

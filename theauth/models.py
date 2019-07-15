@@ -16,31 +16,28 @@ class UserManager(BaseUserManager):
         return self.get(email=email)
 
 class PastoralistManager(BaseUserManager):
-    def create_pastoralist(self, username, first_name, middle_name, last_name, email, password=None):
+    def create_pastoralist(self, username, email, password=None):
         if email is None:
             raise TypeError('Users must have an email address')
-        pastoralist = Pastoralist(username = username, first_name=first_name,middle_name=middle_name, last_name=last_name,
-                        email=self.normalize_email(email))
+        pastoralist = Pastoralist(username = username, email=self.normalize_email(email))
         pastoralist.set_password(password)
         pastoralist.save()
         return pastoralist
 
 class AgrovetManager(BaseUserManager):
-    def create_agrovet(self, username, first_name, middle_name, last_name, email, password=None):
+    def create_agrovet(self, username, email, password=None):
         if email is None:
             raise TypeError('Users must have an email address.')
-        agrovet = Agrovet(username = username, first_name=first_name, middle_name=middle_name, last_name=last_name,
-                    email=self.normalize_email(email))
+        agrovet = Agrovet(username = username, email=self.normalize_email(email))
         agrovet.set_password(password)
         agrovet.save()
         return agrovet
 
 class VetManager(BaseUserManager):
-    def create_vet(self, username, first_name, middle_name, last_name, email, password=None):
+    def create_vet(self, username, email, password=None):
         if email is None:
             raise TypeError('Users must have an email address')
-        vet = Vet(username=username, first_name=first_name, middle_name=middle_name, last_name=last_name,
-            email=self.normalize_email(email))
+        vet = Vet(username=username, email=self.normalize_email(email))
         vet.set_password(password)
         vet.save()
         return vet
