@@ -58,7 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELD = ['first_name', 'middle_name', 'last_name']
+    REQUIRED_FIELD = ['email', 'username']
 
     objects = UserManager()
 
@@ -86,7 +86,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Pastoralist(User, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELD = ['first_name', 'middle_name','last_name']
+    REQUIRED_FIELD = ['email', 'username']
 
     objects = PastoralistManager()
 
@@ -96,7 +96,7 @@ class Pastoralist(User, PermissionsMixin):
 class Agrovet(User, PermissionsMixin):
 
     USERNAME_FIELD='email'
-    REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']
+    REQUIRED_FIELD = ['email', 'username']
 
     objects=AgrovetManager()
 
@@ -106,7 +106,7 @@ class Agrovet(User, PermissionsMixin):
 class Vet(User, PermissionsMixin):
 
     USERNAME_FIELD='email'
-    REQUIRED_FIELD=['first_name', 'middle_name', 'last_name']
+    REQUIRED_FIELD = ['email', 'username']
 
     objects = VetManager()
 
