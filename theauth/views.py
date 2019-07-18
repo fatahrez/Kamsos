@@ -17,7 +17,8 @@ class PastoralistRegistration(APIView):
     serializer_class = PastoralistRegistrationSerializer
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+        user = request.data.get('user', {})
+        serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -50,6 +51,7 @@ class UserLogin(APIView):
     serializer_class = UserLoginSearilizer
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+        user = request.data.get('user', {})
+        serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

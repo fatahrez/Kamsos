@@ -28,7 +28,7 @@ class UserJSONRenderer(ApiJSONRenderer):
     charset = 'utf-8'
     object_label = 'user'
     pagination_object_label = 'users'
-    pagination_object_count = 'UsersCount'
+    pagination_object_count = 'usersCount'
 
     def renderer(self, data, media_type=None, renderer_context=None):
         token = data.get('token', None)
