@@ -33,8 +33,6 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 # Application definition
 
 INSTALLED_APPS = [
-    'theauth.apps.TheauthConfig',
-    'vetservices.apps.VetservicesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +45,10 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'corsheaders',
+
+
+    'theauth.apps.TheauthConfig',
+    'vetservices.apps.VetservicesConfig',
 ]
 
 REST_FRAMEWORK = {
