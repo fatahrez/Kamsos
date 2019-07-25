@@ -1,10 +1,10 @@
-from django.config.urls import urls
+from django.conf.urls import url, include
 from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'vets', views.VetViewSet)
+router.register(r'', views.VetViewSet)
 
 urlpatterns =[
-    url(r'', include(router.urls))
+    url(r'/', include(router.urls))
 ]
