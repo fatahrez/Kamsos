@@ -46,13 +46,15 @@ INSTALLED_APPS = [
 
     'corsheaders',
 
-
     'theauth.apps.TheauthConfig',
     'vetservices.apps.VetservicesConfig',
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES':(
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'theauth.backends.JWTPastoralistAuthentication',
         'theauth.backends.JWTAgrovetAuthentication',
         'theauth.backends.JWTVetAuthentication',
