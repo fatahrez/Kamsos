@@ -5,6 +5,6 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'', views.VetViewSet)
 
-urlpatterns =[
+urlpatterns = [
     url(r'/', include(router.urls))
 ]
