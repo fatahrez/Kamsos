@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
 from django.contrib.auth.models import BaseUserManager
 
+
 # from .managers import (
 #     UserManager, PastoralistManager, AgrovetManager, VetManager
 # )
@@ -15,23 +16,26 @@ class UserManager(BaseUserManager):
     def get_by_natural_key(self, email):
         return self.get(email=email)
 
+
 class PastoralistManager(BaseUserManager):
     def create_pastoralist(self, username, email, password=None):
         if email is None:
             raise TypeError('Users must have an email address')
-        pastoralist = Pastoralist(username = username, email=self.normalize_email(email))
+        pastoralist = Pastoralist(username=username, email=self.normalize_email(email))
         pastoralist.set_password(password)
         pastoralist.save()
         return pastoralist
+
 
 class AgrovetManager(BaseUserManager):
     def create_agrovet(self, username, email, password=None):
         if email is None:
             raise TypeError('Users must have an email address.')
-        agrovet = Agrovet(username = username, email=self.normalize_email(email))
+        agrovet = Agrovet(username=username, email=self.normalize_email(email))
         agrovet.set_password(password)
         agrovet.save()
         return agrovet
+
 
 class VetManager(BaseUserManager):
     def create_vet(self, username, email, password=None):
@@ -41,6 +45,7 @@ class VetManager(BaseUserManager):
         vet.set_password(password)
         vet.save()
         return vet
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=100)
@@ -69,19 +74,19 @@ class User(AbstractBaseUser, PermissionsMixin):
         return token.decode('utf-8')
 
     def get_full_name(self):
-        return (self.first_name+' '+self.last_name)
+        return self.first_name + ' ' + self.last_name
 
     def get_short_name(self):
         return self.first_name
 
     def natural_key(self):
-        return (self.first_name, self.last_name)
+        return self.first_name, self.last_name
 
     def __str__(self):
         return self.username
 
-class Pastoralist(User, PermissionsMixin):
 
+class Pastoralist(User, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELD = ['email', 'username']
 
@@ -90,22 +95,28 @@ class Pastoralist(User, PermissionsMixin):
     def __str__(self):
         return self.username
 
-class Agrovet(User, PermissionsMixin):
 
-    USERNAME_FIELD='email'
+class Agrovet(User, PermissionsMixin):
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELD = ['email', 'username']
 
-    objects=AgrovetManager()
+    objects = AgrovetManager()
 
     def __str__(self):
         return self.username
 
-class Vet(User, PermissionsMixin):
 
-    USERNAME_FIELD='email'
+class Vet(User, PermissionsMixin):
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELD = ['email', 'username']
 
     objects = VetManager()
+
+    telephone_number = models.CharField(max_length=13, unique=True, null=True)
+    county = models.CharField(max_length=30, null=True)
+    sub_county = models.CharField(max_length=30, null=True)
+    qualifications = models.TextField(null=True)
+    vet_image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.username
