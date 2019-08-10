@@ -10,6 +10,7 @@ from .serializers import (
     UserLoginSearilizer
 )
 
+
 # Create your views here.
 class PastoralistRegistration(APIView):
     permission_classes = (AllowAny,)
@@ -23,6 +24,7 @@ class PastoralistRegistration(APIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 class AgrovetRegistration(APIView):
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
@@ -34,6 +36,7 @@ class AgrovetRegistration(APIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 class VetRegistration(APIView):
     permission_classes = (AllowAny,)
     renderer_classes = (UserJSONRenderer,)
@@ -44,6 +47,7 @@ class VetRegistration(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class UserLogin(APIView):
     permission_classes = (AllowAny,)
