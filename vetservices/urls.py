@@ -4,9 +4,9 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'', views.VetViewSet)
-# router.register(r'requestvet', views.RequestVet.as_view())
+router.register(r'requestvet', views.RequestVet.as_view())
 
 urlpatterns = [
     url(r'', include(router.urls)),
-    url(r'requestvet', views.RequestVet.as_view(), name='request-vet')
+    # url(r'requestvet', views.RequestVet.as_view(), name='request-vet')
 ]

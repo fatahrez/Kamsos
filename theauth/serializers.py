@@ -6,6 +6,7 @@ from .models import (
     User, Pastoralist, Agrovet, Vet
 )
 
+
 class PastoralistRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         max_length=128,
@@ -20,6 +21,7 @@ class PastoralistRegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Pastoralist.objects.create_pastoralist(**validated_data)
+
 
 class AgrovetRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -36,6 +38,7 @@ class AgrovetRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Agrovet.objects.create_agrovet(**validated_data)
 
+
 class VetRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         max_length=128,
@@ -50,6 +53,7 @@ class VetRegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Vet.objects.create_vet(**validated_data)
+
 
 class UserLoginSearilizer(serializers.Serializer):
     email = serializers.CharField(max_length=255)
@@ -111,7 +115,35 @@ class UserLoginSearilizer(serializers.Serializer):
                 'This user has been deactivated'
             )
 
-        return{
+        return {
             'email': user.email,
             'token': user.token
         }
+
+
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        max_length=128,
+        min_length=8,
+        write_only=True
+    )
+
+    class Meta:
+        model = User
+        fields = (
+            'email', 'username', 'password'
+        )
+
+        read_only_fields = ('token',)
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+
+        for (key, value) in validated_data.items():
+            setattr(instance, key, value)
+
+        if password is not None:
+            instance.set_passsword(password)
+        instance.save()
+
+        return instance
