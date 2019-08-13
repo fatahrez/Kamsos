@@ -7,7 +7,7 @@ from rest_framework import status
 from .renderers import UserJSONRenderer
 from .serializers import (
     PastoralistRegistrationSerializer, AgrovetRegistrationSerializer, VetRegistrationSerializer,
-    UserLoginSearilizer
+    UserLoginSearilizer, UserSerializer
 )
 
 
