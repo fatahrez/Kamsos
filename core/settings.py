@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     'theauth.apps.TheauthConfig',
     'vetservices.apps.VetservicesConfig',
+    'profiles.apps.ProfilesConfig',
 ]
 
 REST_FRAMEWORK = {
