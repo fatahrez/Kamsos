@@ -1,12 +1,12 @@
 from functools import partial
 
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from theauth.models import Vet
-from rest_framework import viewsets
 from .serializers import VetSerializer, RequestVetSerializer
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 
 
 # Create your views here.
@@ -16,18 +16,20 @@ class CustomPermissionForPastoralist(permissions.BasePermission):
         self.allowed_methods = allowed_methods
 
     def has_permission(self, request, view):
-        if 'pastoralist_id' in request.session.keys:
+        if 'pastoralist_id' in request.session:
             return request.method in self.allowed_methods
 
 
-class VetViewSet(viewsets.ModelViewSet):
+class VetViewSet(generics.ListCreateAPIView):
     queryset = Vet.objects.all()
     serializer_class = VetSerializer
 
 
 class RequestVet(APIView):
     serializer_class = RequestVetSerializer
-    permission_classes = (partial(CustomPermissionForPastoralist, ['GET', 'HEAD', 'POST']),)
+    # authentication_classes = TokenAuthentication
+    # permission_classes = (partial(CustomPermissionForPastoralist, ['GET', 'HEAD', 'POST']), permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, format=None):
         context = {
