@@ -7,4 +7,5 @@ urlpatterns = [
     url('createagrovet', views.AgrovetRegistration.as_view()),
     url('createvet', views.VetRegistration.as_view()),
     url('login', views.UserLogin.as_view()),
+    url('user', views.UserRetrieveUpdateAPIView.as_view()),
 ]
