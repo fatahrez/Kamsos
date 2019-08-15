@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/v1/auth', include('theauth.urls')),
     url(r'^api/v1/', include('vetservices.urls')),
+    url(r'^api/v1/', include('profiles.urls')),
 ]
