@@ -2,9 +2,11 @@ from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from theauth.models import Vet
-from vetservices.renderer import VetJSONRenderer
+from vetservices.models import OrderVet
+from vetservices.renderer import VetJSONRenderer, RequestJSONRenderer
 from .serializers import VetSerializer, RequestVetSerializer
 from rest_framework import status, permissions, generics, mixins
 
@@ -13,7 +15,7 @@ from rest_framework import status, permissions, generics, mixins
 class VetViewSet(mixins.CreateModelMixin,
                  mixins.ListModelMixin,
                  mixins.RetrieveModelMixin,
-                 generics.GenericAPIView):
+                 GenericViewSet):
     lookup_field = 'slug'
     queryset = Vet.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -21,9 +23,13 @@ class VetViewSet(mixins.CreateModelMixin,
     serializer_class = VetSerializer
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = self.request.data
 
         return queryset
+
+    @classmethod
+    def get_extra_actions(cls):
+        return []
 
     def create(self, request):
         serializer_context = {
@@ -62,22 +68,26 @@ class VetViewSet(mixins.CreateModelMixin,
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class RequestVet(APIView):
-    serializer_class = RequestVetSerializer
-    # authentication_classes = TokenAuthentication
-    # permission_classes = (partial(CustomPermissionForPastoralist, ['GET', 'HEAD', 'POST']), permissions.IsAuthenticated,)
-    permission_classes = (permissions.IsAuthenticated,)
 
-    def post(self, request, format=None):
-        context = {
-            'pastoralist_id': request.session['pastoralist_id'],
-            'vet_id': request.session['vet_id']
-        }
-        serializer = RequestVetSerializer(data=request.data, context=context)
-        if serializer.is_valid():
-            serializer.save()
-            data = {
-                "success": "You have set an appointment successfully"
-            }
-            return Response(data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class RequestVetCreateAPIView(generics.ListCreateAPIView):
+    lookup_field = 'vet__slug'
+    lookup_url_kwarg = 'vet_slug'
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = OrderVet.objects.all()
+    renderer_classes = (RequestJSONRenderer,)
+    serializer_class = RequestVetSerializer
+
+    def create(self, request, vet_slug=None):
+        data = request.data.get('vet_request', {})
+        context = {'pastoralist_id': request.user.profile}
+
+        try:
+            context['vet'] = Vet.objects.get(slug=vet_slug)
+        except Vet.DoesNotExist:
+            raise NotFound('The vet you have chosen is not available')
+
+        serializer = self.serializer_class(data=data, context=context)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
