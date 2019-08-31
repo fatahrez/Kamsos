@@ -6,30 +6,38 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
 from django.contrib.auth.models import BaseUserManager
 
+
 # Create your models here.
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, password=None):
+    def create_user(self, username, email, password=None):
+        if username is None:
+            raise TypeError('Users must have a username.')
 
         if email is None:
             raise TypeError('User must have email.')
 
-        user = self.model(email=self.normalize_email(email))
+        user = self.model(username=username, email=self.normalize_email(email))
         user.set_password(password)
         user.save()
 
         return user
 
-    def create_superuser(self, email, password):
-        if password is None:
-            raise TypeError('Superusers must have a password')
+    def create_superuser(self, username, email, password):
+      """
+      Create and return a `User` with superuser powers.
+      Superuser powers means that this use is an admin that can do anything
+      they want.
+      """
+      if password is None:
+          raise TypeError('Superusers must have a password.')
 
-        user = self.create_user(email, password)
-        user.is_superuser = True
-        user.is_staff = True
-        user.save()
+      user = self.create_user(username, email, password)
+      user.is_superuser = True
+      user.is_staff = True
+      user.save()
 
-        return user
+      return user
 
     def get_by_natural_key(self, email):
         return self.get(email=email)
@@ -69,7 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    username = models.CharField(db_index=True, max_length=254, unique=True)
+    username = models.CharField(db_index=True, max_length=254, unique=True, blank=True, null=True)
     email = models.EmailField(db_index=True, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
