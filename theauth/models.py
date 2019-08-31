@@ -6,11 +6,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
 from django.contrib.auth.models import BaseUserManager
 
-
-# from .managers import (
-#     UserManager, PastoralistManager, AgrovetManager, VetManager
-# )
-
 # Create your models here.
 class UserManager(BaseUserManager):
 
@@ -135,6 +130,7 @@ class Vet(User, PermissionsMixin):
 
     objects = VetManager()
 
+    slug = models.SlugField(db_index=True, max_length=255, unique=True, null=True)
     telephone_number = models.CharField(max_length=13, unique=True, null=True)
     county = models.CharField(max_length=30, null=True)
     sub_county = models.CharField(max_length=30, null=True)
