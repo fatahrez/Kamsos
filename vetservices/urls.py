@@ -5,8 +5,8 @@ from theauth.models import Vet
 from vetservices.serializers import VetSerializer
 from . import views
 
-router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'vets', views.VetViewSet)
+router = routers.DefaultRouter()
+router.register('vets', views.VetViewSet)
 
 urlpatterns = [
     url(r'', include(router.urls)),
