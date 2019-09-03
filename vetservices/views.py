@@ -1,4 +1,4 @@
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,7 +23,7 @@ class VetViewSet(mixins.CreateModelMixin,
     serializer_class = VetSerializer
 
     def get_queryset(self):
-        queryset = self.request.data
+        queryset = Vet.objects.all()
 
         return queryset
 
