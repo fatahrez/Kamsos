@@ -12,8 +12,17 @@ class VetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vet
-        fields = ["id", "first_name", "middle_name", "last_name", "username", "email", "telephone_number", "county",
+        fields = ["id", "first_name", "middle_name", "slug", "last_name", "username", "email", "telephone_number",
+                  "county",
                   "sub_county", "qualifications", "vet_image"]
+
+    def create(self, validated_data):
+        vet = Vet.objects.create(**validated_data)
+
+        return vet
+
+    def get_created_at(self, instance):
+        return instance.created_at.isoformat()
 
 
 class RequestVetSerializer(serializers.ModelSerializer):
@@ -21,12 +30,12 @@ class RequestVetSerializer(serializers.ModelSerializer):
 
     createdAt = serializers.SerializerMethodField(method_name='get_created_at')
 
-    # vet_id = serializers.CharField()
+    vet_id = VetSerializer()
 
     class Meta:
         model = OrderVet
         fields = (
-            'id', 'pastoralist_id', 'vet_id', 'createdAt'
+            'pastoralist_id', 'vet_id', 'createdAt',
         )
 
     def create(self, validated_data):
