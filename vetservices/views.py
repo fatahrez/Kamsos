@@ -9,6 +9,7 @@ from vetservices.models import OrderVet
 from vetservices.renderer import VetJSONRenderer, RequestJSONRenderer
 from .serializers import VetSerializer, RequestVetSerializer
 from rest_framework import status, permissions, generics, mixins
+from theauth.models import Pastoralist
 
 
 # Create your views here.
@@ -77,12 +78,17 @@ class RequestVetCreateAPIView(generics.ListCreateAPIView):
     renderer_classes = (RequestJSONRenderer,)
     serializer_class = RequestVetSerializer
 
+    def filter_queryset(self, queryset):
+        filters = {self.lookup_field: self.kwargs[self.lookup_url_kwarg]}
+
+        return queryset.filter(**filters)
+
     def create(self, request, vet_slug=None):
         data = request.data.get('vet_request', {})
         context = {'pastoralist_id': request.user.profile}
 
         try:
-            context['vet'] = Vet.objects.get(slug=vet_slug)
+            context['vet_id'] = Vet.objects.get(slug=vet_slug)
         except Vet.DoesNotExist:
             raise NotFound('The vet you have chosen is not available')
 

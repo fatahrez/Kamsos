@@ -28,19 +28,21 @@ class VetSerializer(serializers.ModelSerializer):
 class RequestVetSerializer(serializers.ModelSerializer):
     pastoralist_id = ProfileSerializer(required=False)
 
-    createdAt = serializers.SerializerMethodField(method_name='get_created_at')
-
-    vet_id = VetSerializer()
+    # createdAt = serializers.SerializerMethodField(method_name='get_created_at')
 
     class Meta:
         model = OrderVet
         fields = (
-            'pastoralist_id', 'vet_id', 'createdAt',
+            'pastoralist_id', 'vet_id'
         )
 
     def create(self, validated_data):
         pastoralist_id = self.context['pastoralist_id']
         vet_id = self.context['vet_id']
 
-    def get_created_at(self, instance):
-        return instance.created_at.isoformat
+        return OrderVet.objects.create(
+            pastoralist_id=pastoralist_id, vet_id=vet_id, **validated_data
+        )
+
+    # def get_created_at(self, instance):
+    #     return instance.created_at.isoformat
