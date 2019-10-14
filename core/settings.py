@@ -44,12 +44,16 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_extensions',
 
+    'django_rest_passwordreset',
+    
     'corsheaders',
 
     'theauth.apps.TheauthConfig',
     'vetservices.apps.VetservicesConfig',
     'profiles.apps.ProfilesConfig',
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
