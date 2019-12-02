@@ -44,10 +44,10 @@ class UserManager(BaseUserManager):
 
 
 class PastoralistManager(BaseUserManager):
-    def create_pastoralist(self, username, email, password=None):
+    def create_pastoralist(self, username, email, phone_number, password=None):
         if email is None:
             raise TypeError('Users must have an email address')
-        pastoralist = Pastoralist(username=username, email=self.normalize_email(email))
+        pastoralist = Pastoralist(username=username, phone_number=phone_number, email=self.normalize_email(email))
         pastoralist.set_password(password)
         pastoralist.save()
         return pastoralist
@@ -79,6 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=100)
     username = models.CharField(db_index=True, max_length=254, unique=True, blank=True, null=True)
     email = models.EmailField(db_index=True, unique=True)
+    phone_number = models.CharField(max_length=14, unique=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -114,7 +115,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Pastoralist(User, PermissionsMixin):
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELD = ['email', 'username']
+    REQUIRED_FIELD = ['email', 'username', 'phone_number']
 
     objects = PastoralistManager()
 

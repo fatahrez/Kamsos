@@ -18,7 +18,7 @@ class PastoralistRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pastoralist
-        fields = ["email", "username", "token", "password"]
+        fields = ["email", "username", "token", "password", "phone_number"]
 
     def create(self, validated_data):
         return Pastoralist.objects.create_pastoralist(**validated_data)
